@@ -25,7 +25,7 @@ public class Servidor_RMI implements Runnable, Buscar_archivo {
 
 
     @Override
-    public Id_serv_RMI buscar(String nombre_buscar) {
+    public Id_serv_RMI buscar(String nombre_buscar) throws RemoteException {
         Id_serv_RMI id = new Id_serv_RMI(-1, "54");
 
         if (buscar_dentro(nombre_buscar)) {

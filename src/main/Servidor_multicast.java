@@ -3,6 +3,7 @@ package main;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.nio.ByteBuffer;
 
 public class Servidor_multicast  implements Runnable{
 
@@ -17,15 +18,15 @@ public class Servidor_multicast  implements Runnable{
         try{
             MulticastSocket s= new MulticastSocket(9876);
             s.setReuseAddress(true);
-            s.setTimeToLive(1500);
-            String msj = puerto_servidor_RMI + "";
-            byte[] b = msj.getBytes();
-            gpo = InetAddress.getByName("228.1.1.1”");
+            s.setTimeToLive(1);
+            int puerto = puerto_servidor_RMI;
+            byte[] b =  ByteBuffer.allocate(4).putInt(puerto).array();
+            gpo = InetAddress.getByName("228.1.1.1");
             s.joinGroup(gpo);
             for(;;){
                 DatagramPacket p = new DatagramPacket(b,b.length,gpo,9999);
                 s.send(p);
-                System.out.println("Enviando mensaje "+msj+ " con un TTL= "+s.getTimeToLive());
+                System.out.println("Enviando mensaje "+puerto+ " con un TTL= "+s.getTimeToLive());
                 try{
                     Thread.sleep(5000);
                 }catch(InterruptedException ie){

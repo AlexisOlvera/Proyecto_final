@@ -4,6 +4,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,12 +30,13 @@ public class Cliente_multicast implements Runnable{
             cl.joinGroup(gpo);
             System.out.println("Unido al grupo");
             for(;;){
-                DatagramPacket p = new DatagramPacket(new byte[1000],1000);
+                DatagramPacket p = new DatagramPacket(new byte[4],4);
                 cl.receive(p);
-                String msj = new String(p.getData());
-                System.out.println("Datagrama recibido.."+msj);
+                ByteBuffer wrapped = ByteBuffer.wrap(p.getData()); // big-endian by default
+                int puerto = wrapped.getInt();
+                System.out.println("Datagrama recibido.."+puerto);
                 System.out.println("Servidor descubierto:" + p.getAddress()+" puerto:"+p.getPort());
-                servidores_RMI.add(new Id_serv_RMI(Integer.parseInt(msj), p.getAddress().toString()));
+                servidores_RMI.add(new Id_serv_RMI(puerto, p.getAddress().toString()));
             }//for
         }catch(Exception e){
             e.printStackTrace();

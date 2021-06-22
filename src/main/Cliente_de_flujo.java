@@ -16,7 +16,7 @@ public class Cliente_de_flujo implements Runnable{
     @Override
     public void run() {
         try {
-            Socket cl = new Socket(id_serv.obtener_Ip(), id_serv.obtener_puerto()+100);
+            Socket cl = new Socket(id_serv.obtener_ip(), id_serv.obtener_puerto()+100);
             DataOutputStream dos = new DataOutputStream(cl.getOutputStream());
             dos.writeUTF(nombre_ar);
             dos.flush();

@@ -18,7 +18,7 @@ public class Id_serv_RMI {
     }
 
     public String obtener_host() {
-        return "";
+        return "rmi://"+ip+":" + puerto + "/buscar";
     }
 
 

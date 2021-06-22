@@ -2,8 +2,9 @@ package main;
 
 import javax.swing.*;
 
-public class Main {
+public class Main2 {
+
     public static void main(String[] args) {
-        Nodo nodo =  new Nodo(10000);
+        Nodo nodo =  new Nodo(10001);
     }
 }

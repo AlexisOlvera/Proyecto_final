@@ -19,11 +19,12 @@ public class Nodo{
 
         ServidorMulticast = new Servidor_multicast(puerto);
         ClienteMulticast = new Cliente_multicast();
-
-        //ClienteRMI = new ClienteRMI();
         ServidorRMI = new Servidor_RMI(directorio, mio);
-        antes = obtener_id_antes();
-        siguiente = obtener_id_siguiente();
+        new Thread(ServidorMulticast).start();
+        new Thread(ClienteMulticast).start();
+        new Thread(ServidorRMI).start();
+        //antes = obtener_id_antes();
+        //siguiente = obtener_id_siguiente();
     }
 
 
