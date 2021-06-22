@@ -27,7 +27,7 @@ public class Servidor_multicast  implements Runnable{
                 s.send(p);
                 System.out.println("Enviando mensaje "+msj+ " con un TTL= "+s.getTimeToLive());
                 try{
-                    Thread.sleep(5);
+                    Thread.sleep(5000);
                 }catch(InterruptedException ie){
                     ie.printStackTrace();
                 }

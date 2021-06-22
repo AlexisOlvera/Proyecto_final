@@ -9,11 +9,17 @@ public class Id_serv_RMI {
         this.ip = ip;
     }
 
-    public int getPuerto() {
+    public int obtener_puerto() {
         return puerto;
     }
 
-    public String getIp() {
+    public String obtener_ip() {
         return ip;
     }
+
+    public String obtener_host() {
+        return "";
+    }
+
+
 }

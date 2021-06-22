@@ -1,9 +1,6 @@
 package main;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -30,25 +27,32 @@ public class Servidor_de_flujo implements Runnable {
                 Socket cl = s.accept();
                 System.out.println("Conexión establecida desde" + cl.getInetAddress() + ":" + cl.getPort());
                 DataInputStream dis = new DataInputStream(cl.getInputStream());
-                byte[] b = new byte[1024];
                 String nombre_archivo = dis.readUTF();
                 System.out.println("Recibimos el archivo:" + nombre_archivo);
-                long tam = dis.readLong();
-                DataOutputStream dos = new DataOutputStream(new FileOutputStream(nombre_archivo));
-                long recibidos = 0;
-                int n, porcentaje;
-                while (recibidos < tam) {
-                    n = dis.read(b);
-                    dos.write(b, 0, n);
+                DataOutputStream dos = new DataOutputStream(cl.getOutputStream());
+                File f = archivo(nombre_archivo);
+                DataInputStream dis_archivo = new DataInputStream(new FileInputStream(f));
+                long enviados = 0;
+                long tam = f.length();  //Tamaño
+                dos.writeUTF(nombre_archivo);
+                dos.flush();
+                dos.writeLong(tam);
+                dos.flush();
+                byte[] b = new byte[1024];
+                int porcentaje, n;
+                while (enviados < tam){
+                    n = dis_archivo.read(b);
+                    dos.write(b,0,n);
                     dos.flush();
-                    recibidos = recibidos + n;
-                    porcentaje = (int) (recibidos * 100 / tam);
-                    System.out.print("Recibido: " + porcentaje + "%\r");
+                    enviados = enviados+n;
+                    porcentaje = (int)(enviados*100/tam);
+                    System.out.print("Enviado: "+porcentaje+"%\r");
                 }//While
-                System.out.print("\n\nArchivo recibido.\n");
+                System.out.print("\n\nArchivo enviado");
                 dos.close();
                 dis.close();
                 cl.close();
+
             }
         } catch (Exception e) {
             e.printStackTrace();

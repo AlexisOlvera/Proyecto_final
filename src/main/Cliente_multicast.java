@@ -4,14 +4,15 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Cliente_multicast implements Runnable{
 
     private Set<Id_serv_RMI> servidores_RMI;
 
-    public Cliente_multicast(Set<Id_serv_RMI> servidores_RMI) {
-        this.servidores_RMI = servidores_RMI;
+    public Cliente_multicast() {
+        this.servidores_RMI = new HashSet<>();
     }
 
     private void escuchar(){
@@ -43,5 +44,9 @@ public class Cliente_multicast implements Runnable{
     @Override
     public void run() {
         escuchar();
+    }
+
+    public Set<Id_serv_RMI> obtener_servidores_RMI() {
+        return servidores_RMI;
     }
 }
