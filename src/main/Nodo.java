@@ -13,7 +13,7 @@ public class Nodo{
 
     private File directorio;
     Nodo(int puerto) throws InterruptedException {
-        mio = new Id_serv_RMI(puerto, "obtener_IP");
+        mio = new Id_serv_RMI(puerto, "127.0.0.1");
         directorio = crear_carpeta(puerto+"");
 
 
@@ -22,7 +22,8 @@ public class Nodo{
         ServidorRMI = new Servidor_RMI(directorio, mio);
         new Thread(ServidorMulticast).start();
         new Thread(ClienteMulticast).start();
-        //new Thread(ServidorRMI).start();
+        new Thread(ServidorRMI).start();
+        Thread.sleep(7000);
     }
 
 
