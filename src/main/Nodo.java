@@ -12,56 +12,49 @@ public class Nodo{
     private Servidor_multicast ServidorMulticast;
 
     private File directorio;
-    Nodo(int puerto){
+    Nodo(int puerto) throws InterruptedException {
         mio = new Id_serv_RMI(puerto, "obtener_IP");
         directorio = crear_carpeta(puerto+"");
 
 
         ServidorMulticast = new Servidor_multicast(puerto);
-        ClienteMulticast = new Cliente_multicast();
+        ClienteMulticast = new Cliente_multicast(this);
         ServidorRMI = new Servidor_RMI(directorio, mio);
         new Thread(ServidorMulticast).start();
         new Thread(ClienteMulticast).start();
-        new Thread(ServidorRMI).start();
-        //antes = obtener_id_antes();
-        //siguiente = obtener_id_siguiente();
+        //new Thread(ServidorRMI).start();
     }
 
 
-    private Id_serv_RMI obtener_id_antes(){
+    public void actualizar_antes(){
         Set<Id_serv_RMI> servidores_RMI = ClienteMulticast.obtener_servidores_RMI();
         int n_servidores = servidores_RMI.size();
         Id_serv_RMI[] id_servidores = new Id_serv_RMI[ n_servidores ];
         servidores_RMI.toArray(id_servidores);
-
-
-        for(int i = 0; i < n_servidores; i++)
-        {
+        for(int i = 0; i < n_servidores; i++) {
             Id_serv_RMI id_servidor = id_servidores[i];
-            if(id_servidor == mio)
+            if(id_servidor.obtener_puerto() == mio.obtener_puerto())
             {
-                return id_servidores[(i - 1 + n_servidores) % n_servidores];
+                antes = id_servidores[(i - 1 + n_servidores) % n_servidores];
             }
         }
-        return new Id_serv_RMI(-1, "-1");
     }
 
-    private Id_serv_RMI obtener_id_siguiente() {
+    public void actualizar_siguiente() {
         Set<Id_serv_RMI> servidores_RMI = ClienteMulticast.obtener_servidores_RMI();
         int n_servidores = servidores_RMI.size();
-        Id_serv_RMI[] id_servidores = new Id_serv_RMI[ n_servidores ];
+        Id_serv_RMI[] id_servidores = new Id_serv_RMI[n_servidores];
         servidores_RMI.toArray(id_servidores);
 
 
         for(int i = 0; i < id_servidores.length; i++)
         {
             Id_serv_RMI id_servidor = id_servidores[i];
-            if(id_servidor == mio)
-            {
-                return id_servidores[(i + 1) % n_servidores];
+            if(id_servidor.obtener_puerto() == mio.obtener_puerto()) {
+                System.out.println("Soy Yo");
+                siguiente = id_servidores[(i + 1) % n_servidores];
             }
         }
-        return new Id_serv_RMI(-1, "-1");
     }
 
     public Id_serv_RMI obtener_id(){
@@ -72,13 +65,14 @@ public class Nodo{
         return siguiente;
     }
 
-    public Id_serv_RMI obtner_anterior(){
+    public Id_serv_RMI obtener_anterior(){
         return antes;
     }
 
 
-    public void buscar(String nombre)    {
+    public Id_serv_RMI buscar(String nombre)    {
         Id_serv_RMI id = ClienteRMI.buscar_siguiente_nodo(nombre, siguiente);
+        return id;
     }
 
     public File crear_carpeta(String puerto){

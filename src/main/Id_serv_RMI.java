@@ -1,6 +1,6 @@
 package main;
 
-public class Id_serv_RMI {
+public class Id_serv_RMI implements Comparable<Id_serv_RMI>{
     private int puerto;
     private String ip;
 
@@ -22,4 +22,8 @@ public class Id_serv_RMI {
     }
 
 
+    @Override
+    public int compareTo(Id_serv_RMI o) {
+        return (int)(this.puerto - o.puerto );
+    }
 }

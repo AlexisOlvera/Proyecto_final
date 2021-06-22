@@ -7,13 +7,16 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Cliente_multicast implements Runnable{
 
     private Set<Id_serv_RMI> servidores_RMI;
+    private Nodo mio;
 
-    public Cliente_multicast() {
-        this.servidores_RMI = new HashSet<>();
+    public Cliente_multicast(Nodo mio) {
+        this.servidores_RMI = new TreeSet<>();
+        this.mio = mio;
     }
 
     private void escuchar(){
@@ -37,6 +40,10 @@ public class Cliente_multicast implements Runnable{
                 System.out.println("Datagrama recibido.."+puerto);
                 System.out.println("Servidor descubierto:" + p.getAddress()+" puerto:"+p.getPort());
                 servidores_RMI.add(new Id_serv_RMI(puerto, p.getAddress().toString()));
+                mio.actualizar_siguiente();
+                mio.actualizar_antes();
+                System.out.println("siguiente : " + mio.obtener_siguiente().obtener_puerto());
+                System.out.println("anterior : " + mio.obtener_anterior().obtener_puerto());
             }//for
         }catch(Exception e){
             e.printStackTrace();
