@@ -10,20 +10,21 @@ public class Nodo{
 
     private Cliente_multicast ClienteMulticast;
     private Servidor_multicast ServidorMulticast;
+    private Servidor_de_flujo ServidorFlujo;
 
     private File directorio;
     Nodo(int puerto) throws InterruptedException {
         mio = new Id_serv_RMI(puerto, "127.0.0.1");
         directorio = crear_carpeta(puerto+"");
-
-
         ServidorMulticast = new Servidor_multicast(puerto);
         ClienteMulticast = new Cliente_multicast(this);
-        ServidorRMI = new Servidor_RMI(directorio, mio);
+        ServidorRMI = new Servidor_RMI(directorio, this);
+        ServidorFlujo = new Servidor_de_flujo(puerto+100, directorio);
         new Thread(ServidorMulticast).start();
         new Thread(ClienteMulticast).start();
         new Thread(ServidorRMI).start();
-        Thread.sleep(7000);
+        new Thread(ServidorFlujo).start();
+//        Thread.sleep(7000);
     }
 
 
@@ -48,11 +49,9 @@ public class Nodo{
         servidores_RMI.toArray(id_servidores);
 
 
-        for(int i = 0; i < id_servidores.length; i++)
-        {
+        for(int i = 0; i < id_servidores.length; i++){
             Id_serv_RMI id_servidor = id_servidores[i];
             if(id_servidor.obtener_puerto() == mio.obtener_puerto()) {
-                System.out.println("Soy Yo");
                 siguiente = id_servidores[(i + 1) % n_servidores];
             }
         }

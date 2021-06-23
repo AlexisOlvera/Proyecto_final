@@ -1,6 +1,8 @@
 package main;
 
-public class Id_serv_RMI implements Comparable<Id_serv_RMI>{
+import java.io.Serializable;
+
+public class Id_serv_RMI implements Comparable<Id_serv_RMI>, Serializable {
     private int puerto;
     private String ip;
 
@@ -18,7 +20,7 @@ public class Id_serv_RMI implements Comparable<Id_serv_RMI>{
     }
 
     public String obtener_host() {
-        return "rmi://"+ip+":" + puerto + "/buscar";
+        return "rmi:/"+ip+":" + puerto + "/Buscar_archivo";
     }
 
 

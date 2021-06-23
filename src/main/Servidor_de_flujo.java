@@ -7,13 +7,15 @@ import java.net.Socket;
 public class Servidor_de_flujo implements Runnable {
 
     private int puerto;
+    private File directorio;
 
-    public Servidor_de_flujo(int puerto) {
+    public Servidor_de_flujo(int puerto, File directorio) {
         this.puerto = puerto;
+        this.directorio = directorio;
     }
 
     private File archivo(String nombre){
-        File ar = new File(nombre);
+        File ar = new File(directorio.getAbsolutePath() + "/" + nombre);
         return ar;
     }
 

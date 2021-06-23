@@ -37,11 +37,10 @@ public class Cliente_multicast implements Runnable{
                 cl.receive(p);
                 ByteBuffer wrapped = ByteBuffer.wrap(p.getData()); // big-endian by default
                 int puerto = wrapped.getInt();
-                System.out.println("Datagrama recibido.."+puerto);
-                System.out.println("Servidor descubierto:" + p.getAddress()+" puerto:"+p.getPort());
                 servidores_RMI.add(new Id_serv_RMI(puerto, p.getAddress().toString()));
                 mio.actualizar_siguiente();
                 mio.actualizar_antes();
+                System.out.println("Yo :" + mio.obtener_id().obtener_puerto());
                 System.out.println("siguiente : " + mio.obtener_siguiente().obtener_puerto());
                 System.out.println("anterior : " + mio.obtener_anterior().obtener_puerto());
             }//for

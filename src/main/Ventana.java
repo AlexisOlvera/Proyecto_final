@@ -2,15 +2,14 @@
 package main;
 public class Ventana extends javax.swing.JFrame{
 
-    Nodo nodo;
-    String historial;
-
+    private Nodo nodo;
+    public String historial;
     public Ventana(Nodo nodo) {
         initComponents();
         this.nodo = nodo;
-
-        AnteriorLabel.setText( Integer.toString(nodo.obtener_anterior().obtener_puerto()) );
-        SiguienteLabel.setText( Integer.toString(nodo.obtener_siguiente().obtener_puerto()) );
+//
+//        AnteriorLabel.setText( Integer.toString(nodo.obtener_anterior().obtener_puerto()) );
+//        SiguienteLabel.setText( Integer.toString(nodo.obtener_siguiente().obtener_puerto()) );
 
         this.setVisible(true);
         this.setTitle(  Integer.toString(nodo.obtener_id().obtener_puerto())  );
@@ -164,14 +163,21 @@ public class Ventana extends javax.swing.JFrame{
         HistorialLabel.setText(myLabel);
     }
 
+    private void descargar(String nombre, Id_serv_RMI id_serv){
+        Cliente_de_flujo cliente_de_flujo = new Cliente_de_flujo(id_serv, nombre);
+        new Thread(cliente_de_flujo).start();
+        escribir_texto(nombre + " descargado con exito");
+    }
+
 
     private void EnviarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarButtonActionPerformed
         String nombre_buscar = NombreText.getText();
         Id_serv_RMI id = nodo.buscar(nombre_buscar);
-
-        if(id.obtener_puerto() == -1) // No lo hayo
-        {
-            //escribir_texto("")
+        if(id.obtener_puerto() == -1){
+            escribir_texto("No se hayo el archivo :(");
+        } else {
+            escribir_texto("Si se hayo en " + id.obtener_host());
+            descargar(nombre_buscar, id);
         }
 
 
