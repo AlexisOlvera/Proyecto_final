@@ -1,17 +1,18 @@
 package main;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 public class Cliente_de_flujo implements Runnable{
     private Id_serv_RMI id_serv;
     private String nombre_ar;
-    public Cliente_de_flujo(Id_serv_RMI id_serv, String nombre_ar){
+    File directorio;
+    Historial historial;
+    public Cliente_de_flujo(Id_serv_RMI id_serv, String nombre_ar, File directorio, Historial historial){
         this.id_serv = id_serv;
         this.nombre_ar = nombre_ar;
+        this.directorio = directorio;
+        this.historial = historial;
     }
     @Override
     public void run() {
@@ -23,17 +24,17 @@ public class Cliente_de_flujo implements Runnable{
             DataInputStream dis = new DataInputStream(cl.getInputStream());
             String nombre = dis.readUTF();
             long tam = dis.readLong();
-            DataOutputStream dos_archivo = new DataOutputStream(new FileOutputStream(nombre));
+            DataOutputStream dos_archivo = new DataOutputStream(new FileOutputStream(directorio.getAbsolutePath()+"/"+nombre));
             long recibidos=0;
-            int n, porcentaje;
+            int n;
             byte[] b = new byte[1024];
+            historial.porcentaje=0;
             while(recibidos < tam){
                 n = dis.read(b);
                 dos_archivo.write(b,0,n);
                 dos_archivo.flush();
                 recibidos = recibidos + n;
-                porcentaje = (int)(recibidos*100/tam);
-                System.out.print("Recibido: "+porcentaje+"%\r");
+                historial.porcentaje = (int)(recibidos*100/tam);
             }//While
             System.out.print("\n\nArchivo recibido.\n");
             dos.close();

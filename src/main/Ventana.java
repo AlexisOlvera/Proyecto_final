@@ -3,7 +3,7 @@ package main;
 public class Ventana extends javax.swing.JFrame{
 
     public Nodo nodo;
-    public String historial;
+    public String historial="Servidor listo<br>";
     public Ventana(Nodo nodo) {
         initComponents();
         this.nodo = nodo;
@@ -49,7 +49,7 @@ public class Ventana extends javax.swing.JFrame{
 
         HistorialLabel.setBackground(new java.awt.Color(255, 255, 255));
         HistorialLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        HistorialLabel.setText("<html>\nHola <br/> adios <br/> valiendo kk <br/>\n\n</html>");
+        HistorialLabel.setText("<html>Servidor listo</html>");
         HistorialLabel.setToolTipText("");
         HistorialLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         HistorialLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -157,14 +157,11 @@ public class Ventana extends javax.swing.JFrame{
 
     private void escribir_texto(String mensaje)
     {
-        String  myLabel =  "<html>" +  historial + "<br/>" + mensaje +  "</html>;";
-        historial += "<br/>" + mensaje;
-
-        HistorialLabel.setText(myLabel);
+        nodo.obtener_historial().historial += "<br/>" + mensaje;
     }
 
     private void descargar(String nombre, Id_serv_RMI id_serv){
-        Cliente_de_flujo cliente_de_flujo = new Cliente_de_flujo(id_serv, nombre);
+        Cliente_de_flujo cliente_de_flujo = new Cliente_de_flujo(id_serv, nombre, nodo.obtener_directorio(), nodo.obtener_historial());
         new Thread(cliente_de_flujo).start();
         escribir_texto(nombre + " descargado con exito");
     }
@@ -174,9 +171,9 @@ public class Ventana extends javax.swing.JFrame{
         String nombre_buscar = NombreText.getText();
         Id_serv_RMI id = nodo.buscar(nombre_buscar);
         if(id.obtener_puerto() == -1){
-            escribir_texto("No se hayo el archivo :(");
+            escribir_texto("No se encontró el archivo :(");
         } else {
-            escribir_texto("Si se hayo en " + id.obtener_host());
+            escribir_texto("Si se encontró en " + id.obtener_host());
             descargar(nombre_buscar, id);
         }
 

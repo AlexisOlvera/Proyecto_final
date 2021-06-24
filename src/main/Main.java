@@ -6,11 +6,10 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        Ventana a0 = new Ventana(new Nodo(12000));
-
-        Ventana a1 = new Ventana(new Nodo(13000));
-
-        Ventana a2 = new Ventana(new Nodo(14000));
-
+        int n_nodos = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de nodos"));
+        Ventana ventanas[] = new Ventana[n_nodos];
+        for(int i = 0; i<n_nodos; i++){
+            ventanas[i] = new Ventana(new Nodo(Integer.parseInt(JOptionPane.showInputDialog("Ingrese el puerto"))));
+        }
     }
 }

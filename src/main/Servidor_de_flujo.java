@@ -8,10 +8,12 @@ public class Servidor_de_flujo implements Runnable {
 
     private int puerto;
     private File directorio;
+    private Historial historial;
 
-    public Servidor_de_flujo(int puerto, File directorio) {
+    public Servidor_de_flujo(int puerto, File directorio, Historial historial) {
         this.puerto = puerto;
         this.directorio = directorio;
+        this.historial = historial;
     }
 
     private File archivo(String nombre){
@@ -41,14 +43,14 @@ public class Servidor_de_flujo implements Runnable {
                 dos.writeLong(tam);
                 dos.flush();
                 byte[] b = new byte[1024];
-                int porcentaje, n;
+                historial.porcentaje=0;
+                int n;
                 while (enviados < tam){
                     n = dis_archivo.read(b);
                     dos.write(b,0,n);
                     dos.flush();
                     enviados = enviados+n;
-                    porcentaje = (int)(enviados*100/tam);
-                    System.out.print("Enviado: "+porcentaje+"%\r");
+                    historial.porcentaje = (int)(enviados*100/tam);
                 }//While
                 System.out.print("\n\nArchivo enviado");
                 dos.close();

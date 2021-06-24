@@ -8,11 +8,11 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class Servidor_RMI implements Runnable, Buscar_archivo {
 
+    private Historial historial;
     private Id_serv_RMI id_mio;
     private File directorio;
     private Nodo nodo_yo;
     private boolean visitado;
-
 
     private boolean buscar_dentro(String nombre_buscar) {
         File[] archivos = this.directorio.listFiles();
@@ -34,21 +34,28 @@ public class Servidor_RMI implements Runnable, Buscar_archivo {
             return id;
         }
         visitado = true;
+        historial.historial+="Estoy buscando " + nombre_buscar + "<br>";
         System.err.println("Esta buscando en mi " + id_mio.obtener_puerto());
         if (buscar_dentro(nombre_buscar)) {
             id = id_mio; // Llenar datos ip y puerto
+            historial.historial+="<span style=\"color:green\"> Encontré el archivo " + nombre_buscar + "</span><br>";
         } else {
+            historial.historial+="<span style=\"color:red\">No encontré el archivo " + nombre_buscar + "</span><br>";
+            historial.historial+="Lo voy a buscar en "+ nodo_yo.obtener_siguiente().obtener_ip()+":"+nodo_yo.obtener_siguiente().obtener_puerto()+"<br>";
             id = Cliente_RMI.buscar_siguiente_nodo(nombre_buscar, nodo_yo.obtener_siguiente()); //El cliente llama al servidor RMI del siguiente nodo
+
         }
         visitado = false;
         System.err.println("Encontraron " + id.obtener_puerto());
         return id;
     }
 
-    Servidor_RMI(File directorio, Nodo nodo) {
+    Servidor_RMI(File directorio, Nodo nodo, Historial historial) {
         this.directorio = directorio;
         this.nodo_yo = nodo;
         this.id_mio = nodo.obtener_id();
+        this.historial = historial;
+
     }
 
     @Override
@@ -64,7 +71,7 @@ public class Servidor_RMI implements Runnable, Buscar_archivo {
         }//catch
         try {
             System.setProperty("java.rmi.server.codebase", "file:/c:/Users/alexi/server/");
-            Servidor_RMI obj = new Servidor_RMI(directorio, nodo_yo);
+            Servidor_RMI obj = new Servidor_RMI(directorio, nodo_yo, historial);
             Buscar_archivo stub = (Buscar_archivo) UnicastRemoteObject.exportObject(obj, 0);
             // Ligamos el objeto remoto en el registro
             Registry registry = LocateRegistry.getRegistry(id_mio.obtener_puerto());

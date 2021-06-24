@@ -11,15 +11,16 @@ public class Nodo{
     public Cliente_multicast ClienteMulticast;
     private Servidor_multicast ServidorMulticast;
     private Servidor_de_flujo ServidorFlujo;
-
     private File directorio;
+    private Historial historial;
     Nodo(int puerto) throws InterruptedException {
         mio = new Id_serv_RMI(puerto, "127.0.0.1");
+        historial = new Historial();
         directorio = crear_carpeta(puerto+"");
         ServidorMulticast = new Servidor_multicast(puerto);
         ClienteMulticast = new Cliente_multicast(this);
-        ServidorRMI = new Servidor_RMI(directorio, this);
-        ServidorFlujo = new Servidor_de_flujo(puerto+100, directorio);
+        ServidorRMI = new Servidor_RMI(directorio, this, historial);
+        ServidorFlujo = new Servidor_de_flujo(puerto+100, directorio, historial);
         new Thread(ServidorMulticast).start();
         new Thread(ClienteMulticast).start();
         new Thread(ServidorRMI).start();
@@ -79,15 +80,22 @@ public class Nodo{
         String nueva_carpeta = "Carpetas/" + puerto ;
         File carpeta = new File(nueva_carpeta);
 
-        if(carpeta.mkdirs()){
-            System.out.println("Ahuevo, si se creo");
-        }
-        else{
-            System.out.println("No le sabes");
-        }
-
         return carpeta;
     }
 
+    public File obtener_directorio(){
+        return directorio;
+    }
 
+    public Servidor_RMI obterner_serv_RMI(){
+        return ServidorRMI;
+    }
+
+    public Servidor_de_flujo obtener_ServidorFlujo() {
+        return ServidorFlujo;
+    }
+
+    public Historial obtener_historial() {
+        return historial;
+    }
 }
