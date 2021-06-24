@@ -2,7 +2,7 @@
 package main;
 public class Ventana extends javax.swing.JFrame{
 
-    private Nodo nodo;
+    public Nodo nodo;
     public String historial;
     public Ventana(Nodo nodo) {
         initComponents();
@@ -23,7 +23,6 @@ public class Ventana extends javax.swing.JFrame{
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         jScrollPane1 = new javax.swing.JScrollPane();
         ActivosLista = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
@@ -147,7 +146,8 @@ public class Ventana extends javax.swing.JFrame{
                                                         .addComponent(PorcentajeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addGap(25, 25, 25))))
         );
-
+        Actualiza_ventana act = new Actualiza_ventana(this);
+        new Thread(act).start();
         pack();
     }// </editor-fold>//GEN-END:initComponents
 

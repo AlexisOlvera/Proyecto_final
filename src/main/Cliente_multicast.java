@@ -40,9 +40,6 @@ public class Cliente_multicast implements Runnable{
                 servidores_RMI.add(new Id_serv_RMI(puerto, p.getAddress().toString()));
                 mio.actualizar_siguiente();
                 mio.actualizar_antes();
-                System.out.println("Yo :" + mio.obtener_id().obtener_puerto());
-                System.out.println("siguiente : " + mio.obtener_siguiente().obtener_puerto());
-                System.out.println("anterior : " + mio.obtener_anterior().obtener_puerto());
             }//for
         }catch(Exception e){
             e.printStackTrace();
@@ -51,6 +48,11 @@ public class Cliente_multicast implements Runnable{
 
     @Override
     public void run() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         escuchar();
     }
 

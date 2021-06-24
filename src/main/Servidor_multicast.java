@@ -26,9 +26,8 @@ public class Servidor_multicast  implements Runnable{
             for(;;){
                 DatagramPacket p = new DatagramPacket(b,b.length,gpo,9999);
                 s.send(p);
-                System.out.println("Enviando mensaje "+puerto+ " con un TTL= "+s.getTimeToLive());
                 try{
-                    Thread.sleep(5000);
+                    Thread.sleep(500);
                 }catch(InterruptedException ie){
                     ie.printStackTrace();
                 }

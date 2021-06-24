@@ -8,7 +8,7 @@ public class Nodo{
     private Cliente_RMI ClienteRMI;
     private Servidor_RMI ServidorRMI;
 
-    private Cliente_multicast ClienteMulticast;
+    public Cliente_multicast ClienteMulticast;
     private Servidor_multicast ServidorMulticast;
     private Servidor_de_flujo ServidorFlujo;
 
